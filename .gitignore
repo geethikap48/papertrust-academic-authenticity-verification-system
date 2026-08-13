@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Uploaded academic papers
+uploads/
+
+# Generated results
+results/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Python cache
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Machine learning caches/models
+.cache/
+huggingface_cache/
+models/
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Generated PDFs
+output/
+outputs/
+downloads/
+
+# Local Flask files
+instance/

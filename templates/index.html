@@ -1,0 +1,318 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Fake Paper Detector</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  <style>
+    #pdf-preview { width: 100%; height: 500px; border: 1px solid #ccc; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container p-4">
+    <h3>Fake Paper Detector</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <p>Upload a PDF:</p>
+        <form method="post" action="/" enctype="multipart/form-data" id="upload-form">
+          <div class="mb-3">
+            <input class="form-control" type="file" name="pdf_file" accept="application/pdf" required id="pdf-input">
+          </div>
+          <button class="btn btn-primary">Upload & Analyze</button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <p>PDF Preview:</p>
+        <iframe id="pdf-preview"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('pdf-input');
+    const preview = document.getElementById('pdf-preview');
+
+    input.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        preview.src = url;
+      }
+    });
+  </script>
+</body>
+</html> -->
+
+
+
+<!--index.html-->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fake Paper Detector</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet"> -->
+  <!-- SweetAlert2 -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="glass-container p-4 p-md-5">
+    <h2 class="mb-4 text-center fw-bold">📑 Fake Paper Detector</h2>
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-5">
+        <div class="glass-card p-4">
+          <h5 class="mb-3">Upload a Research Paper</h5>
+          <form method="post" action="/" enctype="multipart/form-data" id="upload-form">
+            <div class="mb-3">
+              <input class="form-control" type="file" name="pdf_file" accept="application/pdf" required id="pdf-input">
+            </div>
+            <button class="btn btn-primary w-100 py-2">Upload & Analyze</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="glass-card p-4">
+          <h5 class="mb-3">Preview</h5>
+          <iframe id="pdf-preview" title="PDF Preview"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const input = document.getElementById('pdf-input');
+    const preview = document.getElementById('pdf-preview');
+
+    input.addEventListener('change', function() {
+      const file = this.files[0];
+
+      if (file && file.type === 'application/pdf') {
+        preview.src = URL.createObjectURL(file);
+      } else {
+        // SweetAlert2 popup for non-PDF
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid File',
+          text: 'Please upload your report in PDF format only!',
+          confirmButtonColor: '#0d6efd',  // Bootstrap primary color
+          background: 'rgba(20, 30, 48, 0.95)', // dark-glass style
+          color: '#ffffff'
+        });
+        this.value = '';   // Clear invalid file
+        preview.src = '';  // Clear preview
+      }
+    });
+  </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Fake Paper Detector</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<body>
+
+<div class="glass-container p-4 p-md-5">
+
+<h2 class="mb-4 text-center fw-bold">📑 Fake Paper Detector</h2>
+
+<div class="row g-4 align-items-center">
+
+<!-- Upload -->
+<div class="col-lg-5">
+
+<div class="glass-card p-4">
+
+<h5 class="mb-3">Upload a Research Paper</h5>
+
+<form id="upload-form">
+
+<div class="mb-3">
+<input class="form-control"
+       type="file"
+       name="pdf_file"
+       accept="application/pdf"
+       required
+       id="pdf-input">
+</div>
+
+<button class="btn btn-primary w-100 py-2">
+Upload & Analyze
+</button>
+
+</form>
+
+<!-- Progress Bar -->
+<div class="progress mt-3" style="height:25px;display:none;" id="progress-container">
+
+<div id="upload-progress"
+class="progress-bar progress-bar-striped progress-bar-animated"
+style="width:0%">
+
+0%
+
+</div>
+
+</div>
+
+<p class="mt-2 text-center" id="progress-text"></p>
+
+</div>
+
+</div>
+
+<!-- Preview -->
+<div class="col-lg-7">
+
+<div class="glass-card p-4">
+
+<h5 class="mb-3">Preview</h5>
+
+<iframe id="pdf-preview"
+style="width:100%;height:450px;border:none;"></iframe>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const input = document.getElementById("pdf-input");
+const preview = document.getElementById("pdf-preview");
+const form = document.getElementById("upload-form");
+
+const progressContainer = document.getElementById("progress-container");
+const progressBar = document.getElementById("upload-progress");
+const progressText = document.getElementById("progress-text");
+
+
+// PDF preview
+input.addEventListener("change", function(){
+
+const file = this.files[0];
+
+if(file && file.type === "application/pdf"){
+
+preview.src = URL.createObjectURL(file);
+
+}else{
+
+Swal.fire({
+icon:"error",
+title:"Invalid File",
+text:"Please upload your report in PDF format only!"
+});
+
+this.value="";
+preview.src="";
+
+}
+
+});
+
+
+// Upload + Processing
+form.addEventListener("submit", function(e){
+
+e.preventDefault();
+
+const file = input.files[0];
+if(!file) return;
+
+const formData = new FormData();
+formData.append("pdf_file", file);
+
+const xhr = new XMLHttpRequest();
+xhr.open("POST", "/", true);
+
+progressContainer.style.display = "block";
+
+let progress = 0;
+
+
+// Simulated processing progress
+const interval = setInterval(function(){
+
+if(progress < 90){
+
+progress += 5;
+
+progressBar.style.width = progress + "%";
+progressBar.innerHTML = progress + "%";
+
+if(progress < 20)
+progressText.innerText = "Uploading PDF...";
+
+else if(progress < 35)
+progressText.innerText = "Extracting paper content...";
+
+else if(progress < 50)
+progressText.innerText = "Analyzing citations...";
+
+else if(progress < 75)
+progressText.innerText = "Detecting AI generated text...";
+
+else
+progressText.innerText = "Detecting logical drift...";
+
+}
+
+},500);
+
+
+xhr.onload = function(){
+
+clearInterval(interval);
+
+progressBar.style.width = "100%";
+progressBar.innerHTML = "100%";
+progressText.innerText = "Analysis Completed";
+
+setTimeout(function(){
+
+document.open();
+document.write(xhr.responseText);
+document.close();
+
+},800);
+
+};
+
+
+xhr.send(formData);
+
+});
+
+</script>
+
+</body>
+</html>

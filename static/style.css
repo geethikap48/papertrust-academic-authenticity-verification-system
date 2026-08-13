@@ -1,0 +1,192 @@
+/* body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    padding: 20px;
+}
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    max-width: 900px;
+    margin: auto;
+}
+h1, h2, h3 { color: #333; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+table, th, td { border: 1px solid #ccc; }
+th, td { padding: 8px; text-align: left; }
+.status-real { color: #155724; background: #d4edda; padding: 4px 8px; border-radius: 6px; }
+.status-fake { color: #721c24; background: #f8d7da; padding: 4px 8px; border-radius: 6px; }
+.status-unverifiable { color: #856404; background: #fff3cd; padding: 4px 8px; border-radius: 6px; }
+pre { white-space: pre-wrap; word-wrap: break-word; background:#f8f9fa; padding:8px; border-radius:6px; } */
+
+
+/* ==========================================
+  Modern Glassmorphic UI with Dark Mode
+  ==========================================
+*/
+
+
+
+
+
+
+
+
+/*style.css*/
+
+/* 1. CSS Variables for Theming (Light & Dark Mode) */
+:root {
+  --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --text-color: #333;
+  --header-color: #111;
+
+  --glass-bg: rgba(255, 255, 255, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: rgba(0, 0, 0, 0.15);
+
+  --primary-btn-bg: #0d6efd;
+  --primary-btn-text: #ffffff;
+  --form-control-bg: rgba(255, 255, 255, 0.2);
+
+  /* Status Badge Colors */
+  --status-real-text: #146c43;
+  --status-real-bg: rgba(25, 135, 84, 0.15);
+  --status-fake-text: #b02a37;
+  --status-fake-bg: rgba(220, 53, 69, 0.15);
+  --status-unverifiable-text: #997404;
+  --status-unverifiable-bg: rgba(255, 193, 7, 0.15);
+  --status-exact-text: #087990;
+  --status-exact-bg: rgba(13, 202, 240, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-bg: linear-gradient(135deg, #232526 0%, #414345 100%);
+    --text-color: #e0e0e0;
+    --header-color: #ffffff;
+
+    --glass-bg: rgba(30, 30, 30, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: rgba(0, 0, 0, 0.3);
+
+    --primary-btn-bg: #3a86ff;
+    --form-control-bg: rgba(0, 0, 0, 0.2);
+
+    /* Status Badge Colors (Dark Mode Optimized) */
+    --status-real-text: #75b798;
+    --status-real-bg: rgba(39, 174, 96, 0.2);
+    --status-fake-text: #e57373;
+    --status-fake-bg: rgba(217, 83, 79, 0.2);
+    --status-unverifiable-text: #ffca28;
+    --status-unverifiable-bg: rgba(241, 196, 15, 0.2);
+    --status-exact-text: #4dd0e1;
+    --status-exact-bg: rgba(77, 208, 225, 0.2);
+  }
+}
+
+/* 2. General Body & Layout Styles */
+body {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background: var(--body-bg);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* 3. Glassmorphic Container & Card Styles */
+.glass-container {
+  background: var(--glass-bg);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+  width: 100%;
+  max-width: 1200px;
+}
+
+.glass-card {
+  background: transparent; /* Child cards are transparent to the main container */
+  border: none;
+}
+
+h2, h5 {
+  color: var(--header-color);
+  font-weight: 600;
+}
+
+/* 4. Component Styling */
+.form-control {
+  background-color: var(--form-control-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-color);
+}
+.form-control::placeholder { color: var(--text-color); opacity: 0.7; }
+.form-control:focus {
+  background-color: transparent;
+  border-color: var(--primary-btn-bg);
+  box-shadow: 0 0 0 0.25rem rgba(var(--primary-btn-bg), 0.25);
+  color: var(--text-color);
+}
+
+.btn-primary {
+  background-color: var(--primary-btn-bg);
+  border: none;
+}
+
+#pdf-preview {
+  width: 100%;
+  height: 400px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+}
+
+/* 5. Results Page Specific Styles */
+.table {
+  color: var(--text-color);
+  border-color: var(--glass-border);
+}
+
+.table > :not(caption) > * > * {
+  background-color: transparent !important; /* Override Bootstrap's default backgrounds */
+}
+
+.table-hover > tbody > tr:hover > * {
+  color: var(--header-color);
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+thead.table-dark th {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  border-color: var(--glass-border) !important;
+  color: var(--header-color);
+}
+
+pre.glass-pre {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--text-color);
+}
+
+/* Status Badges */
+.status-real, .status-exact, .status-fake, .status-unverifiable {
+  padding: 0.3em 0.6em;
+  border-radius: 8px;
+  font-weight: 500;
+  display: inline-block;
+  border: 1px solid transparent;
+}
+
+.status-real { color: var(--status-real-text); background-color: var(--status-real-bg); border-color: var(--status-real-text); }
+.status-exact { color: var(--status-exact-text); background-color: var(--status-exact-bg); border-color: var(--status-exact-text); font-weight: bold; }
+.status-fake { color: var(--status-fake-text); background-color: var(--status-fake-bg); border-color: var(--status-fake-text); }
+.status-unverifiable { color: var(--status-unverifiable-text); background-color: var(--status-unverifiable-bg); border-color: var(--status-unverifiable-text); }

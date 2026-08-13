@@ -1,0 +1,489 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Detection Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding: 20px; background: #f5f7fb; }
+    .status-real { color: #155724; background: #d4edda; padding: 4px 8px; border-radius: 6px; }
+    .status-exact { color: #0c5460; background: #d1ecf1; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
+    .status-fake { color: #721c24; background: #f8d7da; padding: 4px 8px; border-radius: 6px; }
+    .status-unverifiable { color: #856404; background: #fff3cd; padding: 4px 8px; border-radius: 6px; }
+    pre { white-space: pre-wrap; word-wrap: break-word; background:#f8f9fa; padding:8px; border-radius:6px; }
+    .collapse-button { cursor: pointer; color: #0d6efd; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Detection Results</h2>
+
+    
+    <div class="mb-4 p-3 border rounded bg-light">
+      <h5>Summary:</h5>
+      {% set real = citations | selectattr('status','equalto','✅ Real') | list | length %}
+      {% set fake = citations | selectattr('status','equalto','❌ Fake') | list | length %}
+      {% set unverifiable = citations | selectattr('status','equalto','⚠️ Unverifiable') | list | length %}
+      <p>✅ Real: {{ real }} | ❌ Fake: {{ fake }} | ⚠️ Unverifiable: {{ unverifiable }}</p>
+    </div>
+
+    <div class="mb-3">
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back</a>
+      <a href="{{ url_for('download_csv') }}" class="btn btn-success">Download CSV</a>
+      <a href="{{ url_for('download_pdf') }}" class="btn btn-danger">Download PDF</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Status</th>
+            <th>Verification Score</th>
+            <th>Matches</th>
+            <th>Context Similarity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in citations %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ c.title or "Unknown" }}</td>
+            <td>
+              {% if c.authors %}
+                {{ c.authors | join(', ') }}
+              {% else %}
+                Unknown
+              {% endif %}
+            </td>
+            <td>
+              {% if 'Exact title match' in c.status %}
+                <span class="status-exact">{{ c.status }}</span>
+              {% elif 'Real' in c.status %}
+                <span class="status-real">{{ c.status }}</span>
+              {% elif 'Unverifiable' in c.status %}
+                <span class="status-unverifiable">{{ c.status }}</span>
+              {% else %}
+                <span class="status-fake">{{ c.status }}</span>
+              {% endif %}
+            </td>
+            <td>{{ c.verification_score }}</td>
+            <td>
+              {% if c.matches %}
+                <div class="collapse-button" onclick="toggleMatches('matches-{{ loop.index }}')">
+                  Show Matches ({{ c.matches | length }})
+                </div>
+                <div id="matches-{{ loop.index }}" style="display:none; margin-top:5px;">
+                  {% for m in c.matches %}
+                  <pre>
+Source: {{ m.source }}
+Title: {{ m.title }}
+Authors: {{ m.authors | join(', ') if m.authors else "N/A" }}
+DOI: {{ m.doi or "N/A" }}
+Year: {{ m.year or "N/A" }}
+                  </pre>
+                  {% endfor %}
+                </div>
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td>{{ c.context_similarity or "N/A" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function toggleMatches(id){
+      const el = document.getElementById(id);
+      if(el.style.display === "none") el.style.display = "block";
+      else el.style.display = "none";
+    }
+  </script>
+</body>
+</html> -->
+
+
+
+
+<!--
+results.html-->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Detection Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding: 20px; background: #f5f7fb; }
+    .status-real { color: #155724; background: #d4edda; padding: 4px 8px; border-radius: 6px; }
+    .status-exact { color: #0c5460; background: #d1ecf1; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
+    .status-fake { color: #721c24; background: #f8d7da; padding: 4px 8px; border-radius: 6px; }
+    .status-unverifiable { color: #856404; background: #fff3cd; padding: 4px 8px; border-radius: 6px; }
+    pre { white-space: pre-wrap; word-wrap: break-word; background:#f8f9fa; padding:8px; border-radius:6px; }
+    .collapse-button { cursor: pointer; color: #0d6efd; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Detection Results</h2>
+
+    
+    <div class="mb-4 p-3 border rounded bg-light">
+      <h5>Summary:</h5>
+      {% set real = citations | selectattr('status','equalto','✅ Real') | list | length %}
+      {% set fake = citations | selectattr('status','equalto','❌ Fake') | list | length %}
+      {% set unverifiable = citations | selectattr('status','equalto','⚠️ Unverifiable') | list | length %}
+      <p>✅ Real: {{ real }} | ❌ Fake: {{ fake }} | ⚠️ Unverifiable: {{ unverifiable }}</p>
+    </div>
+
+    <div class="mb-3">
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back</a>
+      <a href="{{ url_for('download_csv') }}" class="btn btn-success">Download CSV</a>
+      <a href="{{ url_for('download_pdf') }}" class="btn btn-danger">Download PDF</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Status</th>
+            <th>Verification Score</th>
+            <th>Matches</th>
+            <th>Context Similarity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in citations %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ c.title or "Unknown" }}</td>
+            <td>
+              {% if c.authors %}
+                {{ c.authors | join(', ') }}
+              {% else %}
+                Unknown
+              {% endif %}
+            </td>
+            <td>
+              {% if 'Exact title match' in c.status %}
+                <span class="status-exact">{{ c.status }}</span>
+              {% elif 'Real' in c.status %}
+                <span class="status-real">{{ c.status }}</span>
+              {% elif 'Unverifiable' in c.status %}
+                <span class="status-unverifiable">{{ c.status }}</span>
+              {% else %}
+                <span class="status-fake">{{ c.status }}</span>
+              {% endif %}
+            </td>
+            <td>{{ c.verification_score }}</td>
+            <td>
+              {% if c.matches %}
+                <div class="collapse-button" onclick="toggleMatches('matches-{{ loop.index }}')">
+                  Show Matches ({{ c.matches | length }})
+                </div>
+                <div id="matches-{{ loop.index }}" style="display:none; margin-top:5px;">
+                  {% for m in c.matches %}
+                  <pre>
+Source: {{ m.source }}
+Title: {{ m.title }}
+Authors: {{ m.authors | join(', ') if m.authors else "N/A" }}
+DOI: {{ m.doi or "N/A" }}
+Year: {{ m.year or "N/A" }}
+                  </pre>
+                  {% endfor %}
+                </div>
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td>{{ c.context_similarity or "N/A" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function toggleMatches(id){
+      const el = document.getElementById(id);
+      if(el.style.display === "none") el.style.display = "block";
+      else el.style.display = "none";
+    }
+  </script>
+</body>
+</html> -->
+
+
+
+
+<!--
+results.html-->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Detection Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding: 20px; background: #f5f7fb; }
+    .status-real { color: #155724; background: #d4edda; padding: 4px 8px; border-radius: 6px; }
+    .status-exact { color: #0c5460; background: #d1ecf1; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
+    .status-fake { color: #721c24; background: #f8d7da; padding: 4px 8px; border-radius: 6px; }
+    .status-unverifiable { color: #856404; background: #fff3cd; padding: 4px 8px; border-radius: 6px; }
+    pre { white-space: pre-wrap; word-wrap: break-word; background:#f8f9fa; padding:8px; border-radius:6px; }
+    .collapse-button { cursor: pointer; color: #0d6efd; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Detection Results</h2>
+
+    
+    <div class="mb-4 p-3 border rounded bg-light">
+      <h5>Summary:</h5>
+      {% set real = citations | selectattr('status','equalto','✅ Real') | list | length %}
+      {% set fake = citations | selectattr('status','equalto','❌ Fake') | list | length %}
+      {% set unverifiable = citations | selectattr('status','equalto','⚠️ Unverifiable') | list | length %}
+      <p>✅ Real: {{ real }} | ❌ Fake: {{ fake }} | ⚠️ Unverifiable: {{ unverifiable }}</p>
+    </div>
+
+    <div class="mb-3">
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back</a>
+      <a href="{{ url_for('download_csv') }}" class="btn btn-success">Download CSV</a>
+      <a href="{{ url_for('download_pdf') }}" class="btn btn-danger">Download PDF</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Status</th>
+            <th>Verification Score</th>
+            <th>Matches</th>
+            <th>Context Similarity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in citations %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ c.title or "Unknown" }}</td>
+            <td>
+              {% if c.authors %}
+                {{ c.authors | join(', ') }}
+              {% else %}
+                Unknown
+              {% endif %}
+            </td>
+            <td>
+              {% if 'Exact title match' in c.status %}
+                <span class="status-exact">{{ c.status }}</span>
+              {% elif 'Real' in c.status %}
+                <span class="status-real">{{ c.status }}</span>
+              {% elif 'Unverifiable' in c.status %}
+                <span class="status-unverifiable">{{ c.status }}</span>
+              {% else %}
+                <span class="status-fake">{{ c.status }}</span>
+              {% endif %}
+            </td>
+            <td>{{ c.verification_score }}</td>
+            <td>
+              {% if c.matches %}
+                <div class="collapse-button" onclick="toggleMatches('matches-{{ loop.index }}')">
+                  Show Matches ({{ c.matches | length }})
+                </div>
+                <div id="matches-{{ loop.index }}" style="display:none; margin-top:5px;">
+                  {% for m in c.matches %}
+                  <pre>
+Source: {{ m.source }}
+Title: {{ m.title }}
+Authors: {{ m.authors | join(', ') if m.authors else "N/A" }}
+DOI: {{ m.doi or "N/A" }}
+Year: {{ m.year or "N/A" }}
+                  </pre>
+                  {% endfor %}
+                </div>
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td>{{ c.context_similarity or "N/A" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function toggleMatches(id){
+      const el = document.getElementById(id);
+      if(el.style.display === "none") el.style.display = "block";
+      else el.style.display = "none";
+    }
+  </script>
+</body>
+</html> -->
+
+
+
+
+<!--
+results.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detection Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <div class="glass-container p-4 p-md-5">
+    <h2 class="mb-4 text-center fw-bold">📊 Detection Results</h2>
+    {% if pdf_filename %}
+    <p class="text-center fst-italic fw-bold mb-4">Source PDF: {{ pdf_filename }}</p>
+    {% endif %}
+
+    <div class="glass-card p-3 mb-4 text-center" style="background: rgba(0,0,0,0.1); border-radius: 12px;">
+      <h5 class="mb-2">Citation Validation Summary</h5>
+      {% set real = citations | selectattr('status','equalto','✅ Real') | list | length %}
+      {% set fake = citations | selectattr('status','equalto','❌ Fake') | list | length %}
+      {% set unverifiable = citations | selectattr('status','equalto','⚠️ Unverifiable') | list | length %}
+      <p class="fs-5 mb-0">
+        <span class="mx-2">✅ Real: <strong>{{ real }}</strong></span> |
+        <span class="mx-2">❌ Fake: <strong>{{ fake }}</strong></span> |
+        <span class="mx-2">⚠️ Unverifiable: <strong>{{ unverifiable }}</strong></span>
+      </p>
+    </div>
+
+    <div class="glass-card p-3 mb-4 text-center" style="background: rgba(0,0,0,0.1); border-radius: 12px;">
+      <h5 class="mb-2">Context Similarity Summary</h5>
+      <p class="fs-5 mb-0">
+        <span class="mx-2">✅ Relevant: <strong>{{ context_summary.relevant }}</strong></span> |
+        <span class="mx-2">❌ Irrelevant: <strong>{{ context_summary.irrelevant }}</strong></span> |
+        <span class="mx-2">⚠️ Weak: <strong>{{ context_summary.weak }}</strong></span> 
+
+      </p>
+    </div>
+
+    <div class="glass-card p-3 mb-4 text-center" style="background: rgba(0,0,0,0.1); border-radius: 12px;">
+      <h5 class="mb-2">AI Detection Summary</h5>
+      <p class="fs-5 mb-0">
+        <span class="mx-2">🤖 AI Generated: <strong>{{ ai_percentage }}</strong></span> |
+        <span class="mx-2">👤 Human: <strong>{{ human_percentage }}</strong></span> 
+      </p>
+    </div>
+
+    <div class="glass-card p-3 mb-4 text-center" style="background: rgba(0,0,0,0.1); border-radius: 12px;">
+      <h5 class="mb-2">Logical Drift Summary</h5>
+      <p class="fs-5 mb-0">
+         <span class="mx-2">⚠️ Inconsistency Level: <strong>{{ drift_percentage }}%</strong></span>
+      </p>
+    </div>
+
+
+    <div class="glass-card p-3 mb-4 text-center">
+     <h4>📌 Consolidated Authenticity Score</h4>
+      {% if final_percentage >= 75 %}
+    <h2 class="text-success">{{ final_percentage }}%</h2>
+      {% elif final_percentage >= 50 %}
+    <h2 class="text-warning">{{ final_percentage }}%</h2>
+      {% else %}
+    <h2 class="text-danger">{{ final_percentage }}%</h2>
+      {% endif %}
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-4">
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back</a>
+      <!-- <a href="{{ url_for('download_csv') }}" class="btn btn-success">Download as CSV</a> -->
+      <a href="{{ url_for('download_pdf') }}" class="btn btn-danger">Download as PDF</a>
+      <!-- <a href="{{ url_for('download_ai_pdf') }}" class="btn btn-success">Download AI Highlighted PDF</a> 
+      <a href="{{ url_for('download_drift_pdf') }}" class="btn btn-warning">Download Drift Highlighted PDF</a>  -->
+    </div>
+
+    <div class="table-responsive glass-card p-3">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Status</th>
+            <th>Verification Score</th>
+            <th>Matches</th>
+            <th>Context Similarity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in citations %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ c.title or "Unknown Title" }}</td>
+            <td>{{ c.authors | join(', ') if c.authors else "Unknown Authors" }}</td>
+            <td>
+              {% if 'Exact title match' in c.status %}
+                <span class="status-exact">{{ c.status }}</span>
+              {% elif 'Real' in c.status %}
+                <span class="status-real">{{ c.status }}</span>
+              {% elif 'Unverifiable' in c.status %}
+                <span class="status-unverifiable">{{ c.status }}</span>
+              {% else %}
+                <span class="status-fake">{{ c.status }}</span>
+              {% endif %}
+            </td>
+            <td class="text-center">{{ c.verification_score }}</td>
+            <td>
+              {% if c.matches %}
+                <button class="btn btn-sm btn-outline-light" data-bs-toggle="collapse" data-bs-target="#matches-{{ loop.index }}">
+                  Show ({{ c.matches | length }})
+                </button>
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td class="text-center">{{ c.context_similarity or "N/A" }}</td>
+          </tr>
+          {% if c.matches %}
+          <tr class="collapse" id="matches-{{ loop.index }}">
+              <td colspan="7" class="p-0">
+                  <div class="p-3">
+                      {% for m in c.matches %}
+                      <pre class="glass-pre mb-2">
+Source:  {{ m.source }}
+Title:   {{ m.title }}
+Authors: {{ m.authors | join(', ') if m.authors else "N/A" }}
+DOI:     {{ m.doi or "N/A" }}
+Year:    {{ m.year or "N/A" }}
+                      </pre>
+                      {% endfor %}
+                  </div>
+              </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
